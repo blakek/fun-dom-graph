@@ -2,36 +2,32 @@ import React, { PropTypes } from 'react'
 import Point from './Point'
 import styles from './style.css'
 
-const getXValues = (fn, yValues) => yValues.map(fn)
+const coords = (domain, fn) => domain.map((x) => {
+  return {
+    x,
+    y: fn(x)
+  }
+})
 
-const testXValues = (steps = 100, accuracy = 1) => {
+const pointFromCoords = ({ x, y }) => <Point key={x} x={x} y={y} width={1} />
+
+const possibleDomain = ({ start = 0, limit = 100, precision = 1 }) => {
   let xValues = []
 
-  for (let i = 0; i < steps; i += 1 / accuracy) {
+  for (let i = start; i < limit; i += precision) {
     xValues.push(i)
   }
 
   return xValues
 }
 
-const plottableYValues = (fn, steps = 100, accuracy = 1) => {
-  let yValues = []
-
-  for (var i = 0; i < steps; i += 1 / accuracy) {
-    yValues.push(fn(i))
+export const Example = ({ fn, showSource }) => {
+  const options = {
+    limit: window.innerWidth,
+    precision: .2
   }
 
-  return yValues
-}
-
-const pointFromCoords = (x, y) => <Point key={x} x={y} y={x} width={1} />
-
-export const Example = ({ fn, showSource }) => {
-  const coords = plottableYValues(fn, window.innerWidth, 2)
-  const yPoints = coords.map(pointFromCoords)
-
-  console.log('coords', coords)
-  console.log('yPoints', yPoints)
+  const plottablePoints = coords(possibleDomain(options), fn).map(pointFromCoords)
 
   return (
     <div className={styles.example}>
@@ -41,7 +37,7 @@ export const Example = ({ fn, showSource }) => {
         </h1>
       }
       <div>
-        {yPoints}
+        {plottablePoints}
       </div>
     </div>
   )
