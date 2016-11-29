@@ -4,6 +4,10 @@
 
 Just a fun project to see how difficult it is to create a "graphing calculator" using DOM elements.
 
+**Example:**
+
+![Demo](https://raw.githubusercontent.com/blakek/fun-dom-graph/master/demo.png)
+
 ## Usage
 
 Start the development server:
